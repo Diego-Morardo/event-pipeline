@@ -74,7 +74,7 @@ Se usa Redis como queue intermedia.
 
 ### Consumer
 
-El consumer es donde pasa el trabajo “real”.
+El consumer:.
 
 * Lee eventos desde Redis
 * Procesa en batches
