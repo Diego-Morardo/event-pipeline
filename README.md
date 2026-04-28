@@ -74,7 +74,7 @@ Se usa Redis como queue intermedia.
 
 ### Consumer
 
-El consumer:.
+El consumer:
 
 * Lee eventos desde Redis
 * Procesa en batches
@@ -90,8 +90,6 @@ Además maneja varios casos importantes:
 ---
 
 ### PostgreSQL
-
-Es la fuente de verdad del sistema.
 
 Tablas principales:
 
