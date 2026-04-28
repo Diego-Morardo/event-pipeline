@@ -1,0 +1,51 @@
+services: 
+  api: 
+    build: .
+    command: uvicorn app.main:app --host 0.0.0.0 --port 5000
+    ports:
+      - "5000:5000"
+    depends_on:
+      - redis
+      - db
+  
+  worker:
+    build: .
+    environment:
+      - PYTHONPATH=/app
+    command: python -m worker.consumer
+    depends_on:
+      - redis
+      - db
+
+  aggregator:
+    build: .
+    environment:
+      - PYTHONPATH=/app
+    command: python -m worker.aggregator
+    depends_on:
+      - db
+
+  user_resolution:
+    build: .
+    environment:
+      - PYTHONPATH=/app
+    command: python -m worker.user_resolution
+    depends_on:
+      - db
+
+  redis: 
+    image: redis:7
+
+  db:
+    image: postgres:15
+    environment: 
+      POSTGRES_DB: events
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      # - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      # - ./db/migrations:/docker-entrypoint-initdb.d/migrations
+      # - ./db:/docker-entrypoint-initdb.d
+      - ./db/migrations:/docker-entrypoint-initdb.d/
+    ports:
+      - "5432:5432"
